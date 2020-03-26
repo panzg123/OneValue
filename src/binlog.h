@@ -124,6 +124,7 @@ struct BinlogSyncStream {
     int logItemCount;       //item count
 
     Binlog::LogItem* firstLogItem(void) {
+        //这个结构体后面拼接的是LogItem
         return (Binlog::LogItem*)(this+1);
     }
 

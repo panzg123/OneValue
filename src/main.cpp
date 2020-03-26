@@ -107,6 +107,7 @@ void startOneValue(void)
 
     //Start sync service
     SMaster* masterInfo = cfg->master();
+    //如果是从节点，且配置了主节点，则建立连接，开始同步
     if (masterInfo->ip[0] != 0) {
         Sync* sync = new Sync(&proxy, masterInfo->ip, masterInfo->port);
         sync->setSyncInterval(masterInfo->syncInterval);

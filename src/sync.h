@@ -21,6 +21,7 @@
 #define SYNC_H
 
 #include <stdlib.h>
+#include <cstring>
 #include <string>
 #include "redisproxy.h"
 #include "binlog.h"

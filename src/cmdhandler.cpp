@@ -947,6 +947,7 @@ void onSyncCommand(ClientPacket* packet, void* arg)
         return;
     }
 
+    //这里获取到slave上次同步的binlog文件名和偏移量
     char fileName[256] = {0};
     int lastUpdatePos = 0;
     char _lastUpdatePos[64] = {0};
@@ -958,8 +959,8 @@ void onSyncCommand(ClientPacket* packet, void* arg)
     reply.reserve(BinlogSyncStream::MaxStreamSize);
     RedisProxy* proxy = (RedisProxy*)arg;
     LeveldbCluster* db = proxy->leveldbCluster();
-    Binlog* curBinlog = db->currentBinlog();
-    BinlogFileList* flist = db->binlogFileList();
+    Binlog* curBinlog = db->currentBinlog();      //当前写的binlog文件
+    BinlogFileList* flist = db->binlogFileList(); //binlog日志文件列表
 
     BinlogSyncStream stream;
     reply.append((char*)&stream, sizeof(BinlogSyncStream));
@@ -981,6 +982,7 @@ void onSyncCommand(ClientPacket* packet, void* arg)
             err = BinlogSyncStream::InvalidFileName;
             errMsg = "invalid binlog file name";
         } else {
+            //找到binlog日志文件列表中的索引，开始遍历咯
             for (; index < flist->fileCount(); ++index) {
                 std::string s = flist->fileName(index);
                 std::string fname = db->binlogFileName(s);
